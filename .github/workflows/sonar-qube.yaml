@@ -5,7 +5,7 @@ on:
     branches:
       - sonarcube
 
-  dispatch_workflow:
+  workflow_dispatch:
 
 
 jobs:
