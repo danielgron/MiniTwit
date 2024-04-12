@@ -20,3 +20,12 @@ type Idb interface {
 	GetAllFollowers() []model.Follower
 	GetAllMessages() []model.Message
 }
+
+/*
+docker run \
+    --rm \
+    -e SONAR_HOST_URL="http://localhost:9000" \
+    -e SONAR_SCANNER_OPTS="-Dsonar.projectKey=minitwit" \
+    -e SONAR_TOKEN="sqp_023e532decb800cad5951d606c213eef41b33ab7" \
+    sonarsource/sonar-scanner-cli
+*/
