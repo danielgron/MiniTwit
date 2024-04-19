@@ -81,7 +81,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${{ github.sha }} --wait
+            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${{ steps.meta-api.outputs.tags }} --wait
 
       #- name: Configure SSH
       #  run: |
