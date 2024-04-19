@@ -53,7 +53,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "institutions-api.serviceAccountName" -}}
+{{- define "minitwit-api.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create }}
 {{- default (include "institutions-api.fullname" .) .Values.serviceAccount.name }}
 {{- else }}
