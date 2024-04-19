@@ -77,7 +77,10 @@ jobs:
       
       - name: Extract tag version
         id: extract-tag
-        run: echo "TAG_VERSION=${{ steps.meta-app.outputs.tags }}".split(':')[1] >> $GITHUB_ENV
+        run: |
+            FULL_TAG="${{ steps.meta-app.outputs.tags }}"
+            TAG_VERSION="${FULL_TAG#*:}"
+            echo "TAG_VERSION=${TAG_VERSION}" >> $GITHUB_ENV
 
 
       - name: helm deploy
