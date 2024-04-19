@@ -75,6 +75,14 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+
+      - name: helm deploy
+        uses: koslibpro/helm-eks-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+            command: helm upgrade --install minitwit-api ../Charts/api -f .values.yaml --set image.tag=${{ github.sha }} --wait
+
       #- name: Configure SSH
       #  run: |
       #    mkdir -p ~/.ssh/

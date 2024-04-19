@@ -96,15 +96,15 @@ func main() {
 
 	pgImpl := &postgres.PostgresDbImplementation{}
 	sqliteImpl := &sqlite.SqliteDbImplementation{}
-	pgImpl.Connect_db()
-	sqliteImpl.Connect_db()
 
 	dbType := os.Getenv("DBTYPE")
 
 	if dbType == "postgres" {
+		pgImpl.Connect_db()
 		db.SetDb(pgImpl)
 		lg.Info("Using Postgress as main DB.")
 	} else {
+		sqliteImpl.Connect_db()
 		db.SetDb(sqliteImpl)
 		lg.Info("Using SQLite as main DB.")
 	}
@@ -112,6 +112,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Use(prometheusMiddleware)
 
+	r.HandleFunc("/health", api.Health).Name("Health")
 	r.HandleFunc("/register", api.Register).Name("Register")
 	r.HandleFunc("/msgs", api.Messages).Methods("GET").Name("Messages")
 	r.HandleFunc("/msgs/{username}", api.Messages_per_user).Methods("GET", "POST").Name("Messages_per_user")
