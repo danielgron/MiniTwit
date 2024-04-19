@@ -74,6 +74,10 @@ jobs:
           labels: ${{ steps.meta-api.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+      
+      - name: Extract tag version
+        id: extract-tag
+        run: echo "TAG_VERSION=${{ steps.meta-app.outputs.tags }}".split(':')[1] >> $GITHUB_ENV
 
 
       - name: helm deploy
@@ -81,7 +85,7 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=sha-${{ steps.meta-api.outputs.sha }} --wait
+            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${TAG_VERSION} --wait
 
       #- name: Configure SSH
       #  run: |
