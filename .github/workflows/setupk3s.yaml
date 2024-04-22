@@ -31,12 +31,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       # https://github.com/docker/metadata-action
+      
 
       - run: curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-      
+        
+
       - run: mkdir ~/.kube
 
-      - run: echo ${{ secrets.KUBE_CONFIG_DATA }} | base64 --decode >> ~/.kube/config
+      - run: echo ${KUBE_CONFIG_DATA} | base64 --decode >> ~/.kube/config
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
 
       - run: kubectl get pods
 
