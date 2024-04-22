@@ -49,7 +49,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create configmap api --from-file=./k3s/production.env -n minitwit
+          args: create configmap api --from-env-file=./k3s/production.env -n minitwit
 
       - uses: actions-hub/kubectl@master
         env:
@@ -61,7 +61,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: -n apply -f ./k3s/test.postgres.yaml -n minitwit
+          args: apply -f ./k3s/test.postgres.yaml -n minitwit
 
       #- name: Configure SSH
       #  run: |
