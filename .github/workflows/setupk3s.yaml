@@ -1,9 +1,6 @@
 name: ci-cd
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 env:
@@ -86,6 +83,12 @@ jobs:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: create secret generic api --from-literal=POSTGRES_PW=kodeord --from-literal=POSTGRES_HOST=postgres
+
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: -n apply -f ./k3s/test.postgres.yaml
 
       - name: helm deploy
         uses: koslibpro/helm-eks-action@master

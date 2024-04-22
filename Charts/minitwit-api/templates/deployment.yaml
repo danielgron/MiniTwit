@@ -36,6 +36,15 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+            - configMapRef:
+                name: api
+          env:
+            - name: POSTGRES_PW
+              valueFrom:
+                secretKeyRef:
+                  name: api
+                  key: POSTGRES_PW
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
