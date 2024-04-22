@@ -79,7 +79,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create namespace minitwit
+          args: create namespace minitwit --dry-run=client -o yaml | kubectl apply -f -
       
       - uses: actions-hub/kubectl@master
         env:
