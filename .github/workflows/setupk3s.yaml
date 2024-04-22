@@ -67,7 +67,7 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f <(envsubst < ./k3s/letsencrypt.yaml) -n minitwit
+          args: apply -n minitwit -f <(envsubst < ./k3s/letsencrypt.yaml)
 
       - uses: actions-hub/kubectl@master
         env:
