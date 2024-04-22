@@ -79,13 +79,13 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create configmap api ./k3s/production.env
+          args: create configmap api --from-file=./k3s/production.env
 
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create secret generic api --from-literal=POSTGRES_PW=kodeord --from-literal=POSTGRES_HOST=postgres
+          args: create secret generic api --from-literal=POSTGRES_PW=${{ secrets.POSTGRES_PW }} --from-literal=POSTGRES_HOST=postgres
 
       - name: helm deploy
         uses: koslibpro/helm-eks-action@master
