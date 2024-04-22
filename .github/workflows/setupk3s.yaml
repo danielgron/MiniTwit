@@ -32,6 +32,18 @@ jobs:
       
       # https://github.com/docker/metadata-action
 
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: delete configmap api -n minitwit  
+
+      - uses: actions-hub/kubectl@master
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: delete secret api -n minitwit
+
       
       - uses: actions-hub/kubectl@master
         env:

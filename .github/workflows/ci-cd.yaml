@@ -85,7 +85,12 @@ jobs:
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create configmap api --from-file=./k3s/production.env -n minitwit
+          args: create configmap api --from-file=./k3s/production.env -n minitwit  kubectl create secret generic production-tls \
+          --save-config \
+          --dry-run=client \
+          --from-file=./k3s/production.env \
+          -o yaml | \
+          kubectl apply -f -
 
       - uses: actions-hub/kubectl@master
         env:
