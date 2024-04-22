@@ -128,9 +128,13 @@ func main() {
 
 	r.Handle("/metrics", promhttp.Handler()).Name("Metrics")
 
-	//fmt.Println("Listening on port 15001...")
-	lg.Info("Listening on port 15001...")
-	err := http.ListenAndServe(":15001", r)
+	port := os.Getenv("APP_PORT")
+	if port == "" {
+		port = "15001"
+	}
+
+	lg.Info("Listening on port:", port)
+	err := http.ListenAndServe(":"+port, r)
 	if err != nil {
 		lg.Fatal("Failed to start server: %v", err)
 	}
