@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -93,6 +94,10 @@ func getCPULoad() (float64, error) {
 
 func main() {
 	lg.Info("Starting Minitwit API server")
+
+	for _, pair := range os.Environ() {
+		fmt.Println(pair)
+	}
 
 	pgImpl := &postgres.PostgresDbImplementation{}
 	sqliteImpl := &sqlite.SqliteDbImplementation{}

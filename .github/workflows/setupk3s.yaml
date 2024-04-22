@@ -1,4 +1,4 @@
-name: ci-cd
+name: setup-k3s
 
 on:
   workflow_dispatch:
@@ -31,71 +31,25 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       
       # https://github.com/docker/metadata-action
-      - name: Extract Docker Metadata for app
-        id: meta-app
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/app
-          flavor: |
-            latest=true
-          tags: |
-            type=sha
 
-      - name: Extract Docker metadata for api
-        id: meta-api
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/api
-          flavor: |
-            latest=true
-          tags: |
-            type=sha
-
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image for app
-        uses: docker/build-push-action@v5
-        with:
-          context: "./minitwit-web-app/"
-          push: true
-          tags: ${{ steps.meta-app.outputs.tags }}
-          labels: ${{ steps.meta-app.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Build and push Docker image for api
-        uses: docker/build-push-action@v5
-        with:
-          context: "./minitwit-api/"
-          push: true
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
       
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create configmap api ./k3s/production.env
+          args: create configmap api --from-file=./k3s/production.env -n minitwit
 
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: create secret generic api --from-literal=POSTGRES_PW=kodeord --from-literal=POSTGRES_HOST=postgres
+          args: create secret generic api --from-literal=POSTGRES_PW=kodeord --from-literal=POSTGRES_HOST=postgres -n minitwit
 
       - uses: actions-hub/kubectl@master
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: -n apply -f ./k3s/test.postgres.yaml
-
-      - name: helm deploy
-        uses: koslibpro/helm-eks-action@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${{steps.meta-api.outputs.version}} --wait
+          args: -n apply -f ./k3s/test.postgres.yaml -n minitwit
 
       #- name: Configure SSH
       #  run: |
