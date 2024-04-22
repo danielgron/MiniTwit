@@ -70,6 +70,9 @@ spec:
         app: postgres
     spec:
 
+      nodeSelector:
+        kubernetes.io/hostname: node2
+
       containers:
       - name: postgres
         image: postgres:latest
@@ -78,7 +81,7 @@ spec:
           value: minitwit-db
         - name: POSTGRES_USER
           value: minitwit
-        - name: POSTGRES_PW
+        - name: POSTGRES_PASSWORD
           value: kodeord
         ports:
         - containerPort: 5432
