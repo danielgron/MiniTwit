@@ -44,9 +44,16 @@ jobs:
 
       - run: echo ${{ secrets.KUBE_CONFIG_DATA }} > $HOME/kubeconfig2
 
-      - run: echo $KUBE_CONFIG_DATA | base64 -d > $HOME/.kube/config
+      - uses: actions-hub/kubectl@master
         env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: delete secret api -n minitwit
+
+      - run: if [ ! -z "${KUBE_CONFIG}" ]; then
+            echo "$KUBE_CONFIG" | base64 -d > $HOME/.kube/config
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
 
       - run: kubectl get pods
 
@@ -56,11 +63,7 @@ jobs:
         with:
           args: delete configmap api -n minitwit  
 
-      - uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: delete secret api -n minitwit
+      
 
       
       - uses: actions-hub/kubectl@master
