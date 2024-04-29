@@ -44,13 +44,8 @@ jobs:
 
       - run: echo ${{ secrets.KUBE_CONFIG_DATA }} > $HOME/kubeconfig2
 
-      - uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: delete secret api -n minitwit
-
-      - run: if [ ! -z "${KUBE_CONFIG}" ]; then echo "$KUBE_CONFIG" | base64 -d > $HOME/.kube/config
+      - run: if [ ! -z "${KUBE_CONFIG}" ]; then
+            echo "$KUBE_CONFIG" | base64 -d > $HOME/.kube/config
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
 
