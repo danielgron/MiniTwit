@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -95,23 +94,19 @@ func getCPULoad() (float64, error) {
 func main() {
 	lg.Info("Starting Minitwit API server")
 
-	for _, pair := range os.Environ() {
-		fmt.Println(pair)
-	}
-
 	pgImpl := &postgres.PostgresDbImplementation{}
 	sqliteImpl := &sqlite.SqliteDbImplementation{}
 
 	dbType := os.Getenv("DBTYPE")
 
 	if dbType == "postgres" {
+		lg.Info("Using Postgress as main DB.")
 		pgImpl.Connect_db()
 		db.SetDb(pgImpl)
-		lg.Info("Using Postgress as main DB.")
 	} else {
+		lg.Info("Using SQLite as main DB.")
 		sqliteImpl.Connect_db()
 		db.SetDb(sqliteImpl)
-		lg.Info("Using SQLite as main DB.")
 	}
 
 	r := mux.NewRouter()
