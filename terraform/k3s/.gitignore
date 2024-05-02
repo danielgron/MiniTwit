@@ -8,4 +8,4 @@ terraform.tfstate.backup
 
 redeploy.sh
 destroy.sh
-secrets.env
+*secrets.env
