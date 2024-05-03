@@ -94,6 +94,9 @@ echo $SHELL
       curl --user UE355473:$SIMPLY_API_KEY -d "$MINITWIT_TEST_APP_RECORD" -H "Content-Type: application/json" -X POST $SIMPLY
       curl --user UE355473:$SIMPLY_API_KEY -d "$RANCHER_RECORD" -H "Content-Type: application/json" -X POST $SIMPLY
 
+
+    sleep 600
+
       echo STARTING initial deployment
 
       PROD_NS=minitwit-prod
@@ -105,13 +108,16 @@ echo $SHELL
 
       sudo kubectl create namespace $PROD_NS
       kubectl apply -n $PROD_NS -f <(envsubst < /yaml/letsencrypt.yaml)
-      kubectl apply -f /yaml/middleware.yaml -n $PROD_NS
+      
       kubectl apply -f /yaml/ingress.yaml -n $PROD_NS
+      kubectl apply -f /yaml/middleware.yaml -n $PROD_NS
 
       kubectl create configmap api --from-env-file=/config/prod-config.env -n $PROD_NS
       kubectl create secret generic api --from-env-file=/config/prod-secrets.env -n $PROD_NS
       helm upgrade --install minitwit-api /Charts/minitwit-api -f /Charts/minitwit-api/values.yaml --set image.tag=latest  -n $PROD_NS
       rm /config/prod-secrets.env
+
+      sleep 600
 
       sudo kubectl create namespace $TEST_NS
       kubectl apply -f /yaml/test.postgres.yaml -n $TEST_NS
