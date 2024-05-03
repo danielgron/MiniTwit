@@ -124,7 +124,7 @@ resource "null_resource" "remote_exec1" {
 
     inline = [
     "chmod +x node1.sh",
-    "SIMPLY_API_KEY=${var.simply_api_key} DIGITALOCEAN_TOKEN=${var.do_read_token} RESERVED_IP=${digitalocean_floating_ip.public_ip.ip_address} DROPLET_ID=${digitalocean_droplet.node1.id} RANCHER_PW=${var.rancher-pw} NODE1_IP=${digitalocean_droplet.node1.ipv4_address_private} NODE2_IP=${digitalocean_droplet.node2.ipv4_address_private} K3S_TOKEN=${var.k3s_token} ./node1.sh",
+    "SIMPLY_API_KEY=${var.simply_api_key} EMAIL=${var.email} DIGITALOCEAN_TOKEN=${var.do_read_token} RESERVED_IP=${digitalocean_floating_ip.public_ip.ip_address} DROPLET_ID=${digitalocean_droplet.node1.id} RANCHER_PW=${var.rancher-pw} NODE1_IP=${digitalocean_droplet.node1.ipv4_address_private} NODE2_IP=${digitalocean_droplet.node2.ipv4_address_private} K3S_TOKEN=${var.k3s_token} ./node1.sh",
     "rm node1.sh"
   ]
 

@@ -16,6 +16,7 @@ variable "do_read_token" {}
 variable "pvt_key" {}
 variable "rancher-pw" {}
 variable "k3s_token" {}
+variable "email" {}
 variable "simply_api_key" {}
 
 
