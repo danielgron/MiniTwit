@@ -41,7 +41,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add report/book.pdf
+          git add report/MSc_group_h.pdf
           git commit -m "Generate PDF from Markdown files"
           git push
         env:
