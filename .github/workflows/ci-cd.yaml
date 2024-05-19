@@ -2,6 +2,10 @@ name: ci-cd
 
 on:
   push:
+    paths:
+      - Charts/**
+      - minitwit-api/**
+      - minitwit-web-app/**
     branches:
       - main
   workflow_dispatch:
@@ -54,41 +58,41 @@ jobs:
           tags: |
             type=sha
 
-      # https://github.com/docker/build-push-action
-      - name: Build and push Docker image for app
-        uses: docker/build-push-action@v5
-        with:
-          context: "./minitwit-web-app/"
-          push: true
-          tags: ${{ steps.meta-app.outputs.tags }}
-          labels: ${{ steps.meta-app.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # # https://github.com/docker/build-push-action
+      # - name: Build and push Docker image for app
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: "./minitwit-web-app/"
+      #     push: true
+      #     tags: ${{ steps.meta-app.outputs.tags }}
+      #     labels: ${{ steps.meta-app.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
 
-      - name: Build and push Docker image for api
-        uses: docker/build-push-action@v5
-        with:
-          context: "./minitwit-api/"
-          push: true
-          tags: ${{ steps.meta-api.outputs.tags }}
-          labels: ${{ steps.meta-api.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+      # - name: Build and push Docker image for api
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: "./minitwit-api/"
+      #     push: true
+      #     tags: ${{ steps.meta-api.outputs.tags }}
+      #     labels: ${{ steps.meta-api.outputs.labels }}
+      #     cache-from: type=gha
+      #     cache-to: type=gha,mode=max
 
-      - uses: actions-hub/kubectl@master
-        env:
-          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: apply -f ./k3s/ns.yaml
+      # - uses: actions-hub/kubectl@master
+      #   env:
+      #     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_DATA }}
+      #   with:
+      #     args: apply -f ./k3s/ns.yaml
       
       
 
-      - name: helm deploy
-        uses: koslibpro/helm-eks-action@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-            command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${{steps.meta-api.outputs.version}} --wait -n minitwit
+      # - name: helm deploy
+      #   uses: koslibpro/helm-eks-action@master
+      #   env:
+      #     KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+      #   with:
+      #       command: helm upgrade --install minitwit-api ./Charts/minitwit-api -f ./Charts/minitwit-api/values.yaml --set image.tag=${{steps.meta-api.outputs.version}} --wait -n minitwit
 
       #- name: Configure SSH
       #  run: |
