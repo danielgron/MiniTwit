@@ -1,0 +1,30 @@
+name: ci-cd
+
+on:
+  push:
+    paths:
+      - report/**
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+        # https://github.com/actions/checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # https://github.com/docker/login-action
+      - name: Execute pandoc
+        uses: docker://pandoc/core:2.9
+        with:
+          args: "--help" 
