@@ -1,1 +1,1 @@
-This should not trigger anything
+This should trigger report-generation
