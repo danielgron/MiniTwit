@@ -33,13 +33,11 @@ jobs:
 
       - name: Generate PDF, Commit and push changes
         run: |
-          git checkout -b report-generation
-          git merge report
           mkdir -p report/build
           pandoc $(ls report/*.md | sort) -s -o report/build/MSc_group_h.pdf
           git add -f report/build/MSc_group_h.pdf
           git commit -m "Generate PDF from Markdown files"
-          git push origin report-generation
+          git push origin report
           gh pr create --title "Generate PDF from Markdown files" --body "This PR generates a PDF from the Markdown files in the report directory." --base main
           gh pr merge --squash --auto
         env:
