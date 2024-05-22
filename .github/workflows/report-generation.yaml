@@ -5,7 +5,7 @@ on:
     paths:
       - report/**
     branches:
-      - report-generation
+      - report
   workflow_dispatch:
 
 
