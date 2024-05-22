@@ -5,7 +5,7 @@ on:
     paths:
       - report/**
     branches:
-      - main
+      - report-generation
   workflow_dispatch:
 
 
@@ -36,8 +36,11 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          git add report/MSc_group_h.pdf
+          git checkout -b report-generation
+          git add report/build/MSc_group_h.pdf
           git commit -m "Generate PDF from Markdown files"
-          git push
+          git push origin report-generation
+          gh pr create --title "Generate PDF from Markdown files" --body "This PR generates a PDF from the Markdown files in the report directory." --base main
+          gh pr merge --squash --auto
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
