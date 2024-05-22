@@ -35,6 +35,7 @@ jobs:
         run: |
           git checkout -b report-generation
           git merge report
+          mkdir -p repo
           pandoc $(ls report/*.md | sort) -s -o report/MSc_group_h.pdf
           git add report/build/MSc_group_h.pdf
           git commit -m "Generate PDF from Markdown files"
