@@ -25,17 +25,17 @@ jobs:
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Install Pandoc
-        run: sudo apt-get -qq install -y pandoc
+        run: sudo apt-get install -y -qq pandoc
 
       - name: Install LaTeX
-        run: sudo apt-get -qq install -y texlive texlive-latex-extra
+        run: sudo apt-get install -y -qq texlive texlive-latex-extra
 
 
       - name: Generate PDF, Commit and push changes
         run: |
           git checkout -b report-generation
           git merge report
-          mkdir -p repo
+          mkdir -p report/build
           pandoc $(ls report/*.md | sort) -s -o report/MSc_group_h.pdf
           git add report/build/MSc_group_h.pdf
           git commit -m "Generate PDF from Markdown files"
